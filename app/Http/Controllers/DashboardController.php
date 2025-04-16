@@ -12,10 +12,10 @@ class DashboardController extends Controller
 
         $user = Auth::user();
 
-             if ($user->role === 'merchaint') {
-                return redirect('/merchaint');
+             if ($user->role === 'manajemen') {
+                return redirect('/manajemen');
             } else {
-                return redirect('/company');
+                return redirect('/user');
             } 
 
     }

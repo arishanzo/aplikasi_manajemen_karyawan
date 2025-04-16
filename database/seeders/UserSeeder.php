@@ -12,20 +12,20 @@ class UserSeeder extends Seeder
     {
         // Admin User
         User::create([
-            'name' => 'merchaint User',
-            'username' => 'merchaint',
-            'email' => 'merchaint@example.com',
-            'password' => Hash::make('merchaint'),
-            'role' => 'merchaint',
+            'name' => 'Sebastian Alex',
+            'username' => 'manajemen',
+            'email' => 'manajemen@example.com',
+            'password' => Hash::make('manajemen'),
+            'role' => 'manajemen',
         ]);
 
         // Regular User
         User::create([
-            'name' => 'company User',
-            'username' => 'company',
-            'email' => 'company@example.com',
-            'password' => Hash::make('company'),
-            'role' => 'company',
+            'name' => 'Hilman',
+            'username' => 'user',
+            'email' => 'user@example.com',
+            'password' => Hash::make('user'),
+            'role' => 'user',
         ]);
     }
 }

@@ -1,10 +1,22 @@
 <?php
 
+use App\Exports\HadirExport;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Merchaint\MakananController;
-use App\Http\Controllers\Merchaint\ProfilController;
-use App\Http\Controllers\MerchaintController;
+use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Manajemen\DataDepartemenController;
+use App\Http\Controllers\Manajemen\ManajemenController;
+use App\Http\Controllers\User\DataDiriController;
+use App\Http\Controllers\User\DataHadirController;
+use App\Http\Controllers\User\DataKaryawanController;
+use App\Http\Controllers\User\UserController;
+use App\Exports\UsersExport;
+use App\Http\Controllers\Histori\AuditController;
+use App\Http\Controllers\Manajemen\ExcelImportController;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\DataDepartemen;
+use App\Models\DataHadir;
+use App\Models\DataKaryawan;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,40 +35,37 @@ use Psy\Readline\Libedit;
 
 
 
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', function () {
-    return redirect(auth()->user()->role === 'merchaint' ? '/merchaint' : '/company');
+    return redirect(auth()->user()->role === 'merchaint' ? '/manajemen' : '/user');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/merchaint', [MerchaintController::class, 'index'])->name('merchaint.dasboard');
-    Route::resource('profil', ProfilController::class);
-    Route::resource('makanan', MakananController::class);
-    Route::get('/merchaint/order', [MerchaintController::class, 'order'])->name('merchaint.order');
+    Route::get('/manajemen', [ManajemenController::class, 'index'])->name('manajemen.dasboard');
+    Route::resource('DataDepartemen', DataDepartemenController::class);
+
+    Route::get('/users/export', function () {
+        return Excel::download(new HadirExport, 'daftarhadir.xlsx');
+    })->name('datahadir.export');
+
+    Route::resource('HistoryAudit', AuditController::class);
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/company', [CompanyController::class, 'index'])->name('company.dasboard');
+    Route::get('/user', [UserController::class, 'index'])->name('user.dasboard');
     
-    Route::get('/company/create/{id}', [CompanyController::class, 'create'])->name('company.create');
-    
-    Route::put('/company/store', [CompanyController::class, 'store'])->name('company.store');
+    Route::resource('DataKaryawan', DataKaryawanController::class);
+    Route::resource('DataHadir', DataHadirController::class);
+ 
 
-    Route::get('/company/order', [CompanyController::class, 'order'])->name('company.order');
+Route::post('/excelimport', [ExcelImportController::class, 'import'])->name('datakaryawan.import');
 
   
 });
 
-
-    // Route::get('/lihatkelas', [LihatkelasController::class, 'index'])->name('lihatkelas');
-    // Route::get('/Buatkelas', [KelasController::class, 'index'])->name('Buatkelas');
-    // Route::get('/tambahkelas', [KelasController::class, 'halamankelas'])->name('kelas.create');
-    // Route::put('/updatekelas/{id_kelas}', [KelasController::class, 'updatekelas'])->name('kelas.update');
-    // Route::post('/kelas', [KelasController::class, 'store'])->name('kelas.store');
-    // Route::get('/editkelas/{id_kelas}', [KelasController::class, 'edit'])->name('kelas.edit');
-    // Route::delete('/kelas/{id}', [KelasController::class, 'destroy'])->name('kelas.destroy');
 
 
 

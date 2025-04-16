@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('username');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['merchaint', 'company'])->default('merchaint'); // Kolom role
+            $table->enum('role', ['manajemen', 'user'])->default('user'); // Kolom role
             $table->timestamps();
         });
     }
